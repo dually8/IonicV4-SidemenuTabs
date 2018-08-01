@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TabRouterModule } from './tabs/tab/tab-router.module';
+import { TabPage } from './tabs/tab/tab.page';
+import { TabPageModule } from './tabs/tab/tab.module';
+import { FirstPage } from './tabs/first/first.page';
+import { SecondPage } from './tabs/second/second.page';
+import { FirstPageModule } from './tabs/first/first.module';
+import { SecondPageModule } from './tabs/second/second.module';
 
 const routes: Routes = [
   {
@@ -18,7 +23,24 @@ const routes: Routes = [
   },
   {
     path: 'tabs',
-    loadChildren: './tabs/tab/tab.module#TabPageModule',
+    component: TabPage,
+    children: [
+      {
+        path: '',
+        redirectTo: '/tabs/(first:first)',
+        pathMatch: 'full',
+      },
+      {
+        path: 'first',
+        outlet: 'first',
+        component: FirstPage,
+      },
+      {
+        path: 'second',
+        outlet: 'second',
+        component: SecondPage,
+      }
+    ]
   },
   {
     path: '**',
@@ -28,9 +50,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    TabPageModule,
+    FirstPageModule,
+    SecondPageModule,
     RouterModule.forRoot(routes, {
-    // enableTracing: true,
-  })],
+      // enableTracing: true,
+    })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
